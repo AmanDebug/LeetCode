@@ -1,14 +1,9 @@
 class Solution {
     public int countCommas(int n) {
-        int i=1;
-        if(n>999){
-            while(n-i >999){
-                i++;
-            }
-            return i;
-
+        if (n > 999) {
+            // Every number from 1000 to n has at least 1 comma.
+            return n - 999;
         }
-        else
-            return 0;
+        return 0;
     }
 }
