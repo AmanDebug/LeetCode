@@ -1,15 +1,14 @@
 class Solution {
     public int countCommas(int n) {
-        return solve(n, 0);
-    }
+        int i=1;
+        if(n>999){
+            while(n-i >999){
+                i++;
+            }
+            return i;
 
-    public int solve(int n,int i){
-        if(n-i >999){
-
-            return solve(n, i+1);
         }
-            
-
-        return i;
+        else
+            return 0;
     }
 }
