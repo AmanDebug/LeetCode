@@ -1,53 +1,34 @@
-import java.util.*;
-
 class Solution {
     public List<String> maxNumOfSubstrings(String s) {
         int n = s.length();
         int[] first = new int[26];
         int[] last = new int[26];
         Arrays.fill(first, -1);
-        Arrays.fill(last, -1);
 
         
+        char[] chars = s.toCharArray();
+        
         for (int i = 0; i < n; i++) {
-            int c = s.charAt(i) - 'a';
+            int c = chars[i] - 'a';
             if (first[c] == -1) first[c] = i;
             last[c] = i;
         }
 
         List<int[]> intervals = new ArrayList<>();
-
         
         for (int i = 0; i < n; i++) {
-            int c = s.charAt(i) - 'a';
-            if (first[c] != i) 
-                continue; // not a valid starting point
+            int c = chars[i] - 'a';
+            if (first[c] != i) continue;
 
-            int start = i;
-            int end = last[c];
-            boolean val = true;
-
-            int j = i;
-            while (j <= end) {
-                int cj = s.charAt(j) - 'a';
-                if (first[cj] < start) {
-                    
-                    val = false;
-                    break;
-                }
-                if (last[cj] > end) {
-                    end = last[cj]; // extend range to cover this letter fully
-                }
-                j++;
-            }
-
-            if (val) {
-                intervals.add(new int[]{start, end});
+           
+            int end = getValidRightEnd(chars, i, first, last);
+            
+            if (end != -1) {
+                intervals.add(new int[]{i, end});
             }
         }
 
-        
-        intervals.sort((a, b) -> a[1] - b[1]); // sort by end ascending
+        intervals.sort((a, b) -> Integer.compare(a[1], b[1]));
 
         List<String> res = new ArrayList<>();
         int lastEnd = -1;
@@ -59,5 +40,22 @@ class Solution {
         }
 
         return res;
+    }
+
+    private int getValidRightEnd(char[] ch, int start, int[] first, int[] last) {
+        int end = last[ch[start] - 'a'];
+        
+        for (int j = start; j <= end; j++) {
+            int cj = ch[j] - 'a';
+            
+            
+            if (first[cj] < start) {
+                return -1; 
+            }
+            if (last[cj] > end) {
+                end = last[cj];
+            }
+        }
+        return end;
     }
 }
